@@ -6,7 +6,7 @@
 /*   By: tlupu <tlupu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 12:58:00 by tlupu             #+#    #+#             */
-/*   Updated: 2024/04/29 14:51:38 by tlupu            ###   ########.fr       */
+/*   Updated: 2024/04/30 14:53:05 by tlupu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,10 @@
 
 int main(void)
 {
+    struct sigaction    act;
+    int     pid;
+    pid = getpid();
+    printf("Server PID is :%d\n", pid);
+
     
 }

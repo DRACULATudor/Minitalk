@@ -6,7 +6,7 @@
 /*   By: tlupu <tlupu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 12:58:03 by tlupu             #+#    #+#             */
-/*   Updated: 2024/04/29 17:05:14 by tlupu            ###   ########.fr       */
+/*   Updated: 2024/04/30 14:48:07 by tlupu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,28 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	return (sign * result);
+}
+
+void 	send_charact(int pid, char chr)
+{
+	int i = 8;
+	while (i > 0)
+	{
+		if(chr && (1 << i))
+			kill(pid, SIGUSR1);
+		else
+			kill(pid, SIGUSR1);
+		i--;
+	}
+	usleep(10000);
+	
+}
+
+void 	send_characters(int pid, char *str, int num)
+{
+	int i = 0;
+	while (i < num)
+		send_charact(pid, str[i++]);
 }
 
 
