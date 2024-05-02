@@ -6,7 +6,7 @@
 /*   By: tlupu <tlupu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 12:58:03 by tlupu             #+#    #+#             */
-/*   Updated: 2024/04/30 14:48:07 by tlupu            ###   ########.fr       */
+/*   Updated: 2024/05/02 12:57:41 by tlupu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ void 	send_charact(int pid, char chr)
 	int i = 8;
 	while (i > 0)
 	{
-		if(chr && (1 << i))
+		if(chr & (1 << i))
 			kill(pid, SIGUSR1);
 		else
-			kill(pid, SIGUSR1);
+			kill(pid, SIGUSR2);
 		i--;
 	}
 	usleep(10000);
