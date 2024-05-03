@@ -6,86 +6,80 @@
 /*   By: tlupu <tlupu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 12:58:03 by tlupu             #+#    #+#             */
-/*   Updated: 2024/05/02 12:57:41 by tlupu            ###   ########.fr       */
+/*   Updated: 2024/05/03 17:48:58 by tlupu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-void signal_handler(int sig)
-{
-	if (sig == SIGUSR1)
-		ft_printf("\t%s%s%s\n", GREEN, "Message delivered", END);
-	else if (sig == SIGUSR2)
-		ft_printf("\t%s%s%s\n", RED, "Message was not delivered", END);
-}
+volatile sig_atomic_t	g_ack = 0;
 
 int	ft_atoi(const char *str)
 {
-	int	i;
-	int	result;
 	int	sign;
+	int	value;
 
-	result = 0;
 	sign = 1;
-	i = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n' || str[i] == '\r'
-		|| str[i] == '\f' || str[i] == '\v')
-		i++;
-	if (str[i] == '-')
+	value = 0;
+	while (*str == ' ' || (*str >= '\t' && *str <= '\r'))
+		str++;
+	if (*str == '-' || *str == '+')
+		sign = 44 - *str++;
+	while (*str >= '0' && *str <= '9')
+		value = value * 10 + (*str++ - '0');
+	if (*str != (*str >= '0' && *str <= '9'))
 	{
-		write(2, "Invalid PID=Negative PID\n", 25);
+		ft_printf("\t%s%s%s\n", RED, "Error: PID incorrect");
 		exit(1);
 	}
-	else if (str[i] == '+')
-		i++;
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		result = result * 10 + (str[i] - '0');
-		i++;
-	}
-	return (sign * result);
+	return (sign * value);
 }
 
-void 	send_charact(int pid, char chr)
+void	received(int sig)
 {
-	int i = 8;
-	while (i > 0)
+	(void)sig;
+	g_ack = 1;
+}
+
+void	send_charact(int pid, char chr)
+{
+	int	i;
+
+	i = 0;
+	while (i < 8)
 	{
-		if(chr & (1 << i))
+		g_ack = 0;
+		if (chr & (1 << i))
 			kill(pid, SIGUSR1);
 		else
 			kill(pid, SIGUSR2);
-		i--;
+		i++;
+		while (!g_ack)
+			pause();
 	}
-	usleep(10000);
-	
 }
 
-void 	send_characters(int pid, char *str, int num)
+void	send_characters(int pid, char *str, int num)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (i < num)
 		send_charact(pid, str[i++]);
 }
 
-
-
 int	main(int argc, char *argv[])
 {
-	struct sigaction action;
-	int pid_serv;
+	int	pid_serv;
+
 	if (argc != 3)
 	{
 		ft_printf("<-->Invalid arguments<-->\n");
 		return (1);
 	}
-	action.sa_handler = signal_handler;
-	action.sa_flags = 0;
-	sigemptyset(&action.sa_mask);
-	sigaction(SIGUSR1, &action, NULL);
-	sigaction(SIGUSR2, &action, NULL);
 	pid_serv = ft_atoi(argv[1]);
+	signal(SIGUSR1, received);
 	send_characters(pid_serv, argv[2], ft_strlen_pf(argv[2]));
+	send_charact(pid_serv, '\0');
 	return (0);
 }
