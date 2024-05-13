@@ -6,7 +6,7 @@
 /*   By: tlupu <tlupu@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/29 12:58:00 by tlupu             #+#    #+#             */
-/*   Updated: 2024/05/03 17:49:22 by tlupu            ###   ########.fr       */
+/*   Updated: 2024/05/07 12:45:42 by tlupu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,9 @@ void	signal_decrypt(int signum, siginfo_t *info, void *s)
 		if (received_char != '\0')
 		{
 			if (received_char != '\n')
-			{
 				ft_printf("%c", received_char);
-			}
 			else if (received_char == '\n')
-			{
 				ft_printf("\n");
-			}
 		}
 		else
 			ft_printf("\n");
@@ -46,8 +42,9 @@ void	signal_decrypt(int signum, siginfo_t *info, void *s)
 
 int	main(void)
 {
-	struct sigaction act;
-	int pid;
+	struct sigaction	act;
+	int					pid;
+
 	pid = getpid();
 	printf("Server PID is :%d\n", pid);
 	act.sa_sigaction = signal_decrypt;

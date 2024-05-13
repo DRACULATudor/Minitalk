@@ -6,14 +6,14 @@
 #    By: tlupu <tlupu@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/29 12:58:33 by tlupu             #+#    #+#              #
-#    Updated: 2024/04/29 14:41:32 by tlupu            ###   ########.fr        #
+#    Updated: 2024/05/13 12:37:00 by tlupu            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FLAGS = -Wall -Wextra -Werror
 CLIENT = client
 SERVER = server
-FT_PRINTF = /home/tlupu/projects/minitalk/ft_printf
+FT_PRINTF = /home/tlupu/projects/minitalk_legit/ft_printf
 INCLUDES = -I$(FT_PRINTF)
 FT_PRINTF_LIBS = -L$(FT_PRINTF) -lftprintf
 
@@ -21,16 +21,26 @@ all: libftprintf ${CLIENT} ${SERVER}
 
 libftprintf:
 	make -C $(FT_PRINTF)
+	touch libftprintf  # Add this line
 
-%:	%.c
-	cc ${FLAGS} $< -o $@ $(INCLUDES) $(FT_PRINTF_LIBS)
-    
+${CLIENT}.o: ${CLIENT}.c
+	cc -c ${FLAGS} $< -o $@ $(INCLUDES)
+
+${SERVER}.o: ${SERVER}.c
+	cc -c ${FLAGS} $< -o $@ $(INCLUDES)
+
+${CLIENT}: ${CLIENT}.o libftprintf  
+	cc ${FLAGS} $< -o $@ $(FT_PRINTF_LIBS)
+
+${SERVER}: ${SERVER}.o libftprintf  
+	cc ${FLAGS} $< -o $@ $(FT_PRINTF_LIBS)
+	
 clean:
 	rm -rf *.o
 	make -C $(FT_PRINTF) clean
-    
+	
 fclean : clean
-	rm -rf ${CLIENT} ${SERVER}
+	rm -rf ${CLIENT} ${SERVER} libftprintf  # Add libftprintf here
 	make -C $(FT_PRINTF) fclean
 
 re: fclean all
