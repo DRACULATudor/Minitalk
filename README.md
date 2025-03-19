@@ -24,4 +24,3 @@ Process identifier)
 ```javascript
 ./client SERVER_PID "STRING TO SEND" || ./client SERVER_PID STRING_TO_SNED
 ```
-
