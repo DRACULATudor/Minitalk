@@ -6,14 +6,14 @@
 #    By: tlupu <tlupu@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/04/29 12:58:33 by tlupu             #+#    #+#              #
-#    Updated: 2024/05/13 12:37:00 by tlupu            ###   ########.fr        #
+#    Updated: 2025/03/19 14:07:20 by tlupu            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 FLAGS = -Wall -Wextra -Werror
 CLIENT = client
 SERVER = server
-FT_PRINTF = /home/tlupu/projects/minitalk_legit/ft_printf
+FT_PRINTF = ft_printf
 INCLUDES = -I$(FT_PRINTF)
 FT_PRINTF_LIBS = -L$(FT_PRINTF) -lftprintf
 
